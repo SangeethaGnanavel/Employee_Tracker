@@ -15,5 +15,10 @@ class Department {
     const db = dbconnection.main();
     return (await db).query(sql);
   }
+  async listdepartment() {
+    const sql = "SELECT name FROM department";
+    const db = dbconnection.main();
+    return (await db).query(sql);
+  }
 }
 module.exports = Department;
