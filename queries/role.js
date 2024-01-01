@@ -6,8 +6,7 @@ class Role {
 
   async addrole(title, salary, department) {
     const params = [title, salary, department];
-    const sql =
-      "insert into role (title,salary,department_id) values (?,?,(select id from department where name=?))";
+    const sql = "insert into role (title,salary,department_id) values (?,?,?)";
     const db = dbconnection.main();
     return (await db).query(sql, params);
   }
@@ -18,7 +17,7 @@ class Role {
     return (await db).query(sql);
   }
   async listrole() {
-    const sql = "SELECT role.title FROM role";
+    const sql = "SELECT id, title FROM role";
     const db = dbconnection.main();
     return (await db).query(sql);
   }

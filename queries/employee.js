@@ -16,10 +16,10 @@ class Employee {
     const db = dbconnection.main();
     return (await db).query(sql);
   }
-  async addemployee(first_name, last_name, role, manager) {
-    const params = [first_name, last_name, role, manager];
+  async addemployee(first_name, last_name, role, managerid) {
+    const params = [first_name, last_name, role, managerid];
     const sql =
-      "insert into employee (first_name,last_name,role_id,manager_id) values (?,?,(select id from role where title=?),(select EMP.id from employee as EMP where CONCAT(EMP.first_name,EMP.last_name)=?))";
+      "insert into employee (first_name,last_name,role_id,manager_id) values (?,?,?,?)";
     const db = dbconnection.main();
     return (await db).query(sql, params);
   }

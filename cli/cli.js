@@ -116,52 +116,53 @@ function addDepartment() {
     );
   });
 }
-function addRole() {
-  const departmentlist = department.listdepartment();
-  departmentlist.then((value) => {
-    inquirer
-      .prompt([
-        {
-          type: "input",
-          name: "newrole",
-          message: "Enter new Role Name",
+async function addRole() {
+  const [departments] = await department.listdepartment();
+  const departmentName = departments.map((item) => item.name);
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "newrole",
+        message: "Enter new Role Name",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Enter salary for the Role",
+      },
+      {
+        type: "list",
+        name: "department_name",
+        message: "Choose Department for the new Role",
+        choices: departmentName,
+      },
+    ])
+    .then((answers) => {
+      const departmentId = departments.find(
+        (department) => department.name === answers.department_name
+      ).id;
+      const newRole = role.addrole(
+        answers.newrole,
+        answers.salary,
+        departmentId
+      );
+      newRole.then(
+        function () {
+          console.log(`Role ${answers.newrole} Added Successfully`);
+          run();
         },
-        {
-          type: "input",
-          name: "salary",
-          message: "Enter salary for the Role",
-        },
-        {
-          type: "list",
-          name: "department_id",
-          message: "Choose Department for the new Role",
-          choices: value[0],
-        },
-      ])
-      .then((answers) => {
-        const newRole = role.addrole(
-          answers.newrole,
-          answers.salary,
-          answers.department_id
-        );
-        newRole.then(
-          function () {
-            console.log(`Role ${answers.newrole} Added Successfully`);
-            run();
-          },
-          function (error) {
-            console.log(error);
-          }
-        );
-      });
-  });
+        function (error) {
+          console.log(error);
+        }
+      );
+    });
 }
 async function addEmployee() {
   const [managers] = await employee.listemployee();
   const managersList = managers.map((item) => item.Manager_Name);
   const [roles] = await role.listrole();
   const roletitle = roles.map((item) => item.title);
-
   inquirer
     .prompt([
       {
@@ -176,23 +177,27 @@ async function addEmployee() {
       },
       {
         type: "list",
-        name: "role_id",
+        name: "role_title",
         message: "Choose  Role",
         choices: roletitle,
       },
       {
         type: "list",
-        name: "manager_id",
+        name: "manager_name",
         message: "Choose Manager",
         choices: managersList,
       },
     ])
     .then((answers) => {
+      const managerId = managers.find(
+        (manager) => manager.Manager_Name === answers.manager_name
+      ).id;
+      const roleId = roles.find((role) => role.title === answers.role_title).id;
       const newEmployee = employee.addemployee(
         answers.first_name,
         answers.last_name,
-        answers.role_id,
-        answers.manager_id
+        roleId,
+        managerId
       );
       newEmployee.then(
         function () {
