@@ -90,9 +90,42 @@ function run() {
     }
   });
 }
-function updateEmployeeRole() {
-  return;
-  //How to map ID of chosen employee to update
+async function updateEmployeeRole() {
+  const [employees] = await employee.listemployee();
+  const employeesList = employees.map((item) => item.Manager_Name);
+  const [roles] = await role.listrole();
+  const roletitle = roles.map((item) => item.title);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "employee_name",
+        message: "Choose Employee to Update",
+        choices: employeesList,
+      },
+      {
+        type: "list",
+        name: "role_title",
+        message: "Choose Role",
+        choices: roletitle,
+      },
+    ])
+    .then((answers) => {
+      const employeeId = employees.find(
+        (employee) => employee.Manager_Name === answers.employee_name
+      ).id;
+      const roleId = roles.find((role) => role.title === answers.role_title).id;
+      const updateEmployee = employee.updateemployeerole(roleId, employeeId);
+      updateEmployee.then(
+        function () {
+          console.log(`Employee Updated Successfully`);
+          run();
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    });
 }
 
 function addDepartment() {

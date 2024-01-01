@@ -23,5 +23,11 @@ class Employee {
     const db = dbconnection.main();
     return (await db).query(sql, params);
   }
+  async updateemployeerole(role_id, employee_id) {
+    const params = [role_id, employee_id];
+    const sql = `update employee set role_id=? where id=?`;
+    const db = dbconnection.main();
+    return (await db).query(sql, params);
+  }
 }
 module.exports = Employee;
