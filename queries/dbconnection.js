@@ -8,7 +8,7 @@ class DBConnection {
       host: "localhost",
       user: "root",
       database: "employees_db",
-      password: "Passsword",
+      password: "Password",
     });
 
     return connection;
