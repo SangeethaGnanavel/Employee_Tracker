@@ -29,5 +29,12 @@ class Employee {
     const db = dbconnection.main();
     return (await db).query(sql, params);
   }
+  async viewemployeebymanager(manager_id) {
+    const params = [manager_id];
+    const sql =
+      "SELECT id as Employee_ID,first_name as First_Name,last_name as Last_Name FROM employee where manager_id=?";
+    const db = dbconnection.main();
+    return (await db).query(sql, params);
+  }
 }
 module.exports = Employee;
