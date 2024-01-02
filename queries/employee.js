@@ -36,5 +36,12 @@ class Employee {
     const db = dbconnection.main();
     return (await db).query(sql, params);
   }
+  async viewemployeebydepartment(department_id) {
+    const params = [department_id];
+    const sql =
+      "select * from employee where role_id in (select id from role where department_id=?);";
+    const db = dbconnection.main();
+    return (await db).query(sql, params);
+  }
 }
 module.exports = Employee;

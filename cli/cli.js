@@ -19,6 +19,7 @@ const questions = [
       "Add an Employee",
       "Update an Employee Role",
       "View employees by manager",
+      "View employees by department",
       "Quit",
     ],
     filter(value) {
@@ -79,6 +80,8 @@ function run() {
         break;
       case "viewemployeesbymanager":
         viewemployeesbymanager();
+      case "viewemployeesbydepartment":
+        viewemployeesbydepartment();
     }
     if (
       answers.option == "viewalldepartments" ||
@@ -92,6 +95,35 @@ function run() {
       return;
     }
   });
+}
+async function viewemployeesbydepartment() {
+  const [departments] = await department.listdepartment();
+  const departmentList = departments.map((item) => item.name);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "department_name",
+        message: "Choose Department",
+        choices: departmentList,
+      },
+    ])
+    .then((answers) => {
+      const departmentId = departments.find(
+        (department) => department.name === answers.department_name
+      ).id;
+      const employeebyDepartment =
+        employee.viewemployeebydepartment(departmentId);
+      employeebyDepartment.then(
+        function (value) {
+          console.table(value[0]);
+          run();
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    });
 }
 async function viewemployeesbymanager() {
   const [managers] = await employee.listemployee();
