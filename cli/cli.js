@@ -20,6 +20,7 @@ const questions = [
       "Update an Employee Role",
       "View employees by manager",
       "View employees by department",
+      "Total Utilized budget of a department",
       "Quit",
     ],
     filter(value) {
@@ -82,6 +83,8 @@ function run() {
         viewemployeesbymanager();
       case "viewemployeesbydepartment":
         viewemployeesbydepartment();
+      case "totalutilizedbudgetofadepartment":
+        viewBudgetofDepartment();
     }
     if (
       answers.option == "viewalldepartments" ||
@@ -95,6 +98,34 @@ function run() {
       return;
     }
   });
+}
+async function viewBudgetofDepartment() {
+  const [departments] = await department.listdepartment();
+  const departmentList = departments.map((item) => item.name);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "department_name",
+        message: "Choose Department",
+        choices: departmentList,
+      },
+    ])
+    .then((answers) => {
+      const departmentId = departments.find(
+        (department) => department.name === answers.department_name
+      ).id;
+      const budgetbyDepartment = role.viewBudgetofDepartment(departmentId);
+      budgetbyDepartment.then(
+        function (value) {
+          console.table(value[0]);
+          run();
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    });
 }
 async function viewemployeesbydepartment() {
   const [departments] = await department.listdepartment();

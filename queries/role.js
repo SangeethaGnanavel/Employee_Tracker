@@ -21,5 +21,12 @@ class Role {
     const db = dbconnection.main();
     return (await db).query(sql);
   }
+  async viewBudgetofDepartment(department_id) {
+    const params = [department_id];
+    const sql =
+      "select sum(role.salary) as Total_Utilized_Budget from role Inner join employee on role.id=employee.role_id and role.department_id=? group by department_id";
+    const db = dbconnection.main();
+    return (await db).query(sql, params);
+  }
 }
 module.exports = Role;
