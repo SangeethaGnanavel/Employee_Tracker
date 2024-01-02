@@ -18,6 +18,7 @@ const questions = [
       "Add a Role",
       "Add an Employee",
       "Update an Employee Role",
+      "View employees by manager",
       "Quit",
     ],
     filter(value) {
@@ -76,6 +77,8 @@ function run() {
       case "updateanemployeerole":
         updateEmployeeRole();
         break;
+      case "viewemployeesbymanager":
+        viewemployeesbymanager();
     }
     if (
       answers.option == "viewalldepartments" ||
@@ -89,6 +92,34 @@ function run() {
       return;
     }
   });
+}
+async function viewemployeesbymanager() {
+  const [managers] = await employee.listemployee();
+  const managersList = managers.map((item) => item.Manager_Name);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "manager_name",
+        message: "Choose Manager",
+        choices: managersList,
+      },
+    ])
+    .then((answers) => {
+      const managerId = managers.find(
+        (manager) => manager.Manager_Name === answers.manager_name
+      ).id;
+      const employeebyManager = employee.viewemployeebymanager(managerId);
+      employeebyManager.then(
+        function (value) {
+          console.table(value[0]);
+          run();
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    });
 }
 async function updateEmployeeRole() {
   const [employees] = await employee.listemployee();
