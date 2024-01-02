@@ -81,10 +81,15 @@ function run() {
         break;
       case "viewemployeesbymanager":
         viewemployeesbymanager();
+        break;
       case "viewemployeesbydepartment":
         viewemployeesbydepartment();
+        break;
       case "totalutilizedbudgetofadepartment":
         viewBudgetofDepartment();
+        break;
+      case "quit":
+        break;
     }
     if (
       answers.option == "viewalldepartments" ||
