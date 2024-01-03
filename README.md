@@ -48,4 +48,4 @@ GitHub repository URL : https://github.com/SangeethaGnanavel/Employee_Tracker
 
 Email for Question : sangeetha.gnana@gmail.com
 
-Link to video :
+Link to video :  https://screenrec.com/share/1Y9oaXv03w
